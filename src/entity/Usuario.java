@@ -3,6 +3,7 @@ package entity;
 import java.io.Serializable;
 import java.util.Objects;
 
+
 public class Usuario implements Serializable{
 	
 	/**
@@ -14,17 +15,18 @@ public class Usuario implements Serializable{
 	
 	private String login;
 	private String senha;
-	private String tipo;
+	private TipoUsuario tipo;
 	public Usuario() {};
-	public Usuario(String login,String senha,String tipo) {
+	public Usuario(String login,String senha,TipoUsuario tipo) {
 		setLogin(login);
 		setSenha(senha);
 		setTipo(tipo);
 	}
-	public String getTipo() {
+	
+	public TipoUsuario getTipo() {
 		return tipo;
 	}
-	public void setTipo(String tipo) {
+	public void setTipo(TipoUsuario tipo) {
 		this.tipo = tipo;
 	}
 	public String getLogin() {
