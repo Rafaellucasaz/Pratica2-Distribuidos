@@ -12,7 +12,7 @@ public class GatewayServidor {
 			GatewayInterface skeleton = (GatewayInterface) UnicastRemoteObject.exportObject(refObjRemoto, 0);
 			LocateRegistry.createRegistry(1099);
 			Registry registro = LocateRegistry.getRegistry(1099);
-			Thread.sleep(10000); // Simular falha -> colocar para dormir
+			//Thread.sleep(10000); // Simular falha -> colocar para dormir
 			registro.bind("Gateway",skeleton);
 			System.err.println("Servidor Gateway Pronto:");
 		} catch (Exception e) {

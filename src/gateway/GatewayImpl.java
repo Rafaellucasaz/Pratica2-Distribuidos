@@ -12,7 +12,7 @@ public class GatewayImpl implements GatewayInterface {
 	@Override
 	public AutenticacaoInterface getServidorAutenticacao() {
 		try {
-			Registry registro = LocateRegistry.getRegistry("localhost",1100);
+			Registry registro = LocateRegistry.getRegistry(1100);
 			AutenticacaoInterface servidorAuth = (AutenticacaoInterface) registro.lookup("Autenticacao");
 			System.out.println("retornando servidor de autenticação para cliente...");
 			return servidorAuth;

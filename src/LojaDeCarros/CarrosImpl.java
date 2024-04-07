@@ -38,8 +38,6 @@ public class CarrosImpl implements CarrosInterface{
         replica01 = new CarrosImplReplica01(); 
         replica02 = new CarrosImplReplica02();
         replica03 = new CarrosImplReplica03();
-        
-        
         atualizarReplicas(carros);
 	}
 	

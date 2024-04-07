@@ -5,12 +5,13 @@ import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.Random;
 
+import LojaDeCarrosReplica.CarrosImplReplica01;
+
 public class CarrosServidor {
 
-	public static void sortearLider() {
+	public static int sortearLider() {
 		Random random = new Random();
-		int numeroSorteado = random.nextInt(3) + 1;
-		System.out.println("Líder sorteado: " + numeroSorteado);
+		return random.nextInt(3) + 1;
 	}
 
 	public static void main(String[] args) {
@@ -20,6 +21,8 @@ public class CarrosServidor {
 			LocateRegistry.createRegistry(1101);
 			Registry registro = LocateRegistry.getRegistry(1101);
 			Thread.sleep(10000); // Simular falha -> colocar para dormir
+			int sorteado = sortearLider();
+			
 			registro.bind("Carros", skeletonCarros);
 			System.err.println("Servidor de Carros Pronto:");
 		} catch (Exception e) {
