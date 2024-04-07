@@ -6,11 +6,18 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import LojaDeCarrosReplica.CarrosImplReplica01;
+import LojaDeCarrosReplica.CarrosImplReplica02;
+import LojaDeCarrosReplica.CarrosImplReplica03;
 import entity.Carro;
 import entity.Categorias;
 
 public class CarrosImpl implements CarrosInterface{
 	Map<String, Carro> carros;
+    CarrosImplReplica01 replica01;
+    CarrosImplReplica02 replica02;
+    CarrosImplReplica03 replica03;
+    
 	public CarrosImpl() {
 		carros = new HashMap<String, Carro>();
 		carros.put("23456789012", new Carro("23456789012", "Chevrolet Onix", 2019, 55000, Categorias.economico));
@@ -26,7 +33,22 @@ public class CarrosImpl implements CarrosInterface{
         carros.put("98765432109", new Carro("98765432109", "Honda Civic", 2021, 110000, Categorias.executivo));
         carros.put("87654321098", new Carro("87654321098", "Chevrolet Cruze", 2020, 105000, Categorias.executivo));
         carros.put("76543210987", new Carro("76543210987", "Audi A3", 2019, 125000, Categorias.executivo));
+        
+        // Instância de replicas para carregar base de dados
+        replica01 = new CarrosImplReplica01(); 
+        replica02 = new CarrosImplReplica02();
+        replica03 = new CarrosImplReplica03();
+        
+        
+        atualizarReplicas(carros);
 	}
+	
+	private void atualizarReplicas(Map<String, Carro> carros2) {
+		System.out.println("Base da replica 01 atualizada (?): " + replica01.atualizarBaseDados(carros2));
+		System.out.println("Base da replica 02 atualizada (?): " + replica02.atualizarBaseDados(carros2));
+		System.out.println("Base da replica 03 atualizada (?): " + replica03.atualizarBaseDados(carros2));
+	}
+	
 	@Override
 	public Boolean adicionarCarro(String renavam, String modelo, int ano, double preco, Categorias categoria)throws RemoteException {
 		Carro carro = new Carro(renavam,modelo,ano,preco,categoria);
@@ -37,8 +59,8 @@ public class CarrosImpl implements CarrosInterface{
 		
 		carros.put(renavam,carro);
 		System.out.println("carro adicionado");
+		 atualizarReplicas(carros);
 		return true;
-		
 	}
 	@Override
 	public Boolean removerCarro(String renavam) throws RemoteException{
@@ -46,6 +68,7 @@ public class CarrosImpl implements CarrosInterface{
 			Carro carro = entry.getValue();
 			if(carro.getRenavam().equalsIgnoreCase(renavam)) {
 				Boolean removido = carros.remove(renavam, carro);
+				 atualizarReplicas(carros);
 				return removido;
 			}
 		}
@@ -74,6 +97,7 @@ public class CarrosImpl implements CarrosInterface{
 		carro.setAnoFabricacao(ano);
 		carro.setPreco(preco);
 		carro.setCategoria(categoria);
+		 atualizarReplicas(carros);
 		return true;
 	}
 	@Override
@@ -82,6 +106,7 @@ public class CarrosImpl implements CarrosInterface{
 	}
 	@Override
 	public Boolean comprarCarro(Carro carro)throws RemoteException {
+		 atualizarReplicas(carros);
 		return carros.remove(carro.getRenavam(), carro);
 	}
 }
