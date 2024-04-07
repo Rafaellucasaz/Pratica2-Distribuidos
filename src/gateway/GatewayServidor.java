@@ -12,7 +12,7 @@ public class GatewayServidor {
 			LocateRegistry.createRegistry(1099);
 			Registry registro = LocateRegistry.getRegistry(1099);
 			registro.bind("Gateway",skeleton);
-			System.err.println("Servidor Pronto:");
+			System.err.println("Servidor Gateway Pronto:");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
