@@ -10,4 +10,5 @@ module CarShopRMI {
 	exports gateway;
 	exports LojaDeCarros;
 	exports entity;
+	exports LojaDeCarrosBaseDados;
 }

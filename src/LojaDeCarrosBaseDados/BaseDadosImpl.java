@@ -1,20 +1,19 @@
-package LojaDeCarros;
+package LojaDeCarrosBaseDados;
 
 import java.rmi.RemoteException;
-import java.rmi.registry.LocateRegistry;
-import java.rmi.registry.Registry;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import LojaDeCarrosBaseDados.BaseDadosInterface;
+
 import entity.Carro;
 import entity.Categorias;
 
-public class CarrosImpl implements CarrosInterface{
+public class BaseDadosImpl implements BaseDadosInterface{
+	
 	Map<String, Carro> carros;
-    BaseDadosInterface baseDados;
     
-	public CarrosImpl() {
+	public BaseDadosImpl() {
 		carros = new HashMap<String, Carro>();
 		carros.put("23456789012", new Carro("23456789012", "Chevrolet Onix", 2019, 55000, Categorias.economico));
         carros.put("34567890123", new Carro("34567890123", "Ford Ka", 2020, 60000, Categorias.economico));
@@ -29,60 +28,62 @@ public class CarrosImpl implements CarrosInterface{
         carros.put("98765432109", new Carro("98765432109", "Honda Civic", 2021, 110000, Categorias.executivo));
         carros.put("87654321098", new Carro("87654321098", "Chevrolet Cruze", 2020, 105000, Categorias.executivo));
         carros.put("76543210987", new Carro("76543210987", "Audi A3", 2019, 125000, Categorias.executivo));
-        
-        conectarBaseDados();
-     
-       
 	}
-	
-	public void conectarBaseDados() {
-		try {
-			Registry registro = LocateRegistry.getRegistry(1104);
-			baseDados = (BaseDadosInterface) registro.lookup("BaseDados");
+	@Override
+	public  void addCarro(Carro carro) {
+		carros.put(carro.getRenavam(), carro);
+	}
+	@Override
+	public Boolean removeCarro(String renavam) throws RemoteException {
+		for(Map.Entry<String, Carro> entry:carros.entrySet()) {
+			Carro carro = entry.getValue();
+			if(carro.getRenavam().equalsIgnoreCase(renavam)) {
+				Boolean removido = carros.remove(renavam, carro);
 			
-			
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+				return removido;
+			}
 		}
+		return false;
+	}
+	@Override
+	public ArrayList<Carro> listarCarros() throws RemoteException {
+		ArrayList<Carro> carrosLista = new ArrayList<Carro>(carros.values());
+		Collections.sort(carrosLista,(carro1,carro2) -> carro1.getNome().compareTo(carro2.getNome()));
+		return carrosLista;
+		
 	}
 
-	
-	@Override
-	public Boolean adicionarCarro(String renavam, String modelo, int ano, double preco, Categorias categoria)throws RemoteException {
-		Carro carro = new Carro(renavam,modelo,ano,preco,categoria);
-		Carro aux = carros.get(carro);
-		if(aux != null) {
-			return false;
-		}
-		
-		baseDados.addCarro(carro);
-		System.out.println("carro adicionado");
-		return true;
-	}
-	@Override
-	public Boolean removerCarro(String renavam) throws RemoteException{
-		return baseDados.removeCarro(renavam);
-	}
-	@Override
-	public ArrayList<Carro> listarCarros()throws RemoteException {
-		return baseDados.listarCarros();
-	}
 	@Override
 	public Carro pesquisarCarro(String RenavanOuNome)throws RemoteException {
-		return baseDados.pesquisarCarro(RenavanOuNome);
+		for(Map.Entry<String, Carro> entry:carros.entrySet()) {
+			Carro carro = entry.getValue();
+			if(carro.getRenavam().equalsIgnoreCase(RenavanOuNome)|| carro.getNome().equalsIgnoreCase(RenavanOuNome)) {
+				return carro;
+			}
+		}
+		return null;
 	}
+	
 	@Override
 	public Boolean alterarCarro(String renavam, String modelo, int ano, double preco, Categorias categoria)throws RemoteException{
-		return baseDados.alterarCarro(renavam, modelo, ano, preco, categoria);
+		Carro carro = pesquisarCarro(renavam);
+		carro.setNome(modelo);
+		carro.setAnoFabricacao(ano);
+		carro.setPreco(preco);
+		carro.setCategoria(categoria);
+		 
+		return true;
 	}
+	
 	@Override
 	public int getQuantidade() throws RemoteException{
-		return baseDados.getQuantidade();
+		return carros.size();
 	}
+	
 	@Override
 	public Boolean comprarCarro(Carro carro)throws RemoteException {
 		
-		return baseDados.comprarCarro(carro);
+		return carros.remove(carro.getRenavam(), carro);
 	}
+
 }

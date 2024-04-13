@@ -37,7 +37,8 @@ public class Cliente {
 	}
 	
 	public static void lojaCarros(GatewayInterface objRemotoGateway,Usuario user)throws Exception {
-		CarrosInterface objRemotoCarros = objRemotoGateway.getServidorLoja();
+	
+		CarrosInterface objRemotoCarros = objRemotoGateway.selectReplica();
 		if(user.getTipo() == TipoUsuario.cliente) {
 			menuCliente(objRemotoCarros,user);
 		}
@@ -327,7 +328,7 @@ public class Cliente {
 		System.out.println("conectando ao gateway...");
 		try {
 
-			Registry registro = LocateRegistry.getRegistry("192.168.1.7",1099);
+			Registry registro = LocateRegistry.getRegistry("localhost",1099);
 			GatewayInterface objRemotoGateway = (GatewayInterface) registro.lookup("Gateway");
 			autenticacao(objRemotoGateway);
 			
