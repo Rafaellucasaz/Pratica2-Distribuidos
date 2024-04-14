@@ -3,6 +3,7 @@ package cliente;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -328,10 +329,11 @@ public class Cliente {
 		System.out.println("conectando ao gateway...");
 		try {
 
-			Registry registro = LocateRegistry.getRegistry("localhost",1099);
+			Registry registro = LocateRegistry.getRegistry("192.168.1.2",1099);
 			GatewayInterface objRemotoGateway = (GatewayInterface) registro.lookup("Gateway");
 			autenticacao(objRemotoGateway);
-			
+			LocalDateTime agora = LocalDateTime.now();
+			System.err.println(agora + " [cliente] INFO - Cliente conectado com sucesso");
 		} catch (Exception e) {
 			System.out.println("imposivel conectar no gateway... Tente novamente mais tarde");
 		}

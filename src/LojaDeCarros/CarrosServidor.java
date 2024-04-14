@@ -3,6 +3,7 @@ package LojaDeCarros;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
+import java.time.LocalDateTime;
 import java.util.Random;
 
 import LojaDeCarrosReplica.CarrosImplReplica01;
@@ -24,7 +25,8 @@ public class CarrosServidor {
 			//int sorteado = sortearLider();
 			
 			registro.bind("Carros", skeletonCarros);
-			System.err.println("Servidor de Carros Pronto:");
+			LocalDateTime agora = LocalDateTime.now();
+			System.err.println(agora + " [carros] INFO - Servidor de Carros iniciado na porta 1101");
 		} catch (Exception e) {
 			System.err.println("servidor:" + e.toString());
 			e.printStackTrace();
