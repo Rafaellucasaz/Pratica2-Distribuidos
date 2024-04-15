@@ -17,7 +17,8 @@ public class BaseDadosServidor02 {
 			
 			registro.bind("BaseDados", skeletonBaseDados);
 			LocalDateTime agora = LocalDateTime.now();
-			System.err.println(agora + " [database] INFO - Base de Dados iniciada na porta 1104");
+			System.err.println(agora + " [database] INFO - Base de Dados iniciada na porta 1124");
+			refBaseDadosObjRemoto.connectNext(1104);
 
 		} catch (Exception e) {
 			System.err.println("servidor:" + e.toString());

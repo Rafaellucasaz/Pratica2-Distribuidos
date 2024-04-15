@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 public class GatewayServidor {
 
 	public static void main(String[] args) {
-		 System.setProperty("java.rmi.server.hostname", "192.168.1.2");
+		 System.setProperty("java.rmi.server.hostname", "localhost");
 		 System.setProperty("java.security.policy", "java.policy");
 		
 		try {

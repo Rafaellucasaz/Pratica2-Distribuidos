@@ -329,7 +329,7 @@ public class Cliente {
 		System.out.println("conectando ao gateway...");
 		try {
 
-			Registry registro = LocateRegistry.getRegistry("192.168.1.2",1099);
+			Registry registro = LocateRegistry.getRegistry("localhost",1099);
 			GatewayInterface objRemotoGateway = (GatewayInterface) registro.lookup("Gateway");
 			autenticacao(objRemotoGateway);
 			LocalDateTime agora = LocalDateTime.now();

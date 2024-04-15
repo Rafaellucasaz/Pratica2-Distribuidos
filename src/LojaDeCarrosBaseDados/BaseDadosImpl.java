@@ -1,6 +1,8 @@
 package LojaDeCarrosBaseDados;
 
 import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -12,7 +14,9 @@ import entity.Categorias;
 public class BaseDadosImpl implements BaseDadosInterface{
 	
 	Map<String, Carro> carros;
+	boolean emProcesso = false;
     
+	BaseDadosInterface proxBaseDados;
 	public BaseDadosImpl() {
 		carros = new HashMap<String, Carro>();
 		carros.put("23456789012", new Carro("23456789012", "Chevrolet Onix", 2019, 55000, Categorias.economico));
@@ -28,10 +32,85 @@ public class BaseDadosImpl implements BaseDadosInterface{
         carros.put("98765432109", new Carro("98765432109", "Honda Civic", 2021, 110000, Categorias.executivo));
         carros.put("87654321098", new Carro("87654321098", "Chevrolet Cruze", 2020, 105000, Categorias.executivo));
         carros.put("76543210987", new Carro("76543210987", "Audi A3", 2019, 125000, Categorias.executivo));
+        
+	}
+	
+	public void connectNext(int port) {
+		try {
+			Thread.sleep(10000);
+			Registry registro = LocateRegistry.getRegistry(port);
+			proxBaseDados = (BaseDadosInterface) registro.lookup("BaseDados");
+			System.out.println("conectado na proxima base de dados na porta: " + port);
+			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		};
+		
+		
+	}
+	public boolean permissao(int cont) {
+		if(cont > 2) {
+			System.out.println("permissao para alterar base de dados concedida");
+			return true;
+		}
+		if(emProcesso) {
+			return false;
+		}
+		try {
+			return proxBaseDados.permissao(cont+1);
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
+	@Override
+	public void atualizarBaseDados(Map<String, Carro> carros, int cont) {
+		if(cont != 0 && cont < 3) {
+			System.out.println("atualizando base de dados");
+			this.carros = carros;
+			try {
+				proxBaseDados.atualizarBaseDados(carros, cont+1);
+			} catch (RemoteException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		else {
+			if(cont == 3) {
+				System.out.println("todas as bases atualizadas");
+				
+			}
+			else {
+				try {
+					proxBaseDados.atualizarBaseDados(carros, cont+1);
+				} catch (RemoteException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+		
 	}
 	@Override
 	public  void addCarro(Carro carro) {
-		carros.put(carro.getRenavam(), carro);
+		if(permissao(0)) {
+			emProcesso = true;
+			carros.put(carro.getRenavam(), carro);
+			try {
+				atualizarBaseDados(carros, 0);
+				emProcesso = false;
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		else {
+			System.out.println("ocupado");
+		}
+		
 	}
 	@Override
 	public Boolean removeCarro(String renavam) throws RemoteException {
@@ -85,5 +164,7 @@ public class BaseDadosImpl implements BaseDadosInterface{
 		
 		return carros.remove(carro.getRenavam(), carro);
 	}
+
+	
 
 }
