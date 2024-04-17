@@ -49,32 +49,55 @@ public class CarrosImpl implements CarrosInterface{
 
 	
 	@Override
-	public Boolean adicionarCarro(String renavam, String modelo, int ano, double preco, Categorias categoria)throws RemoteException {
+	public int adicionarCarro(String renavam, String modelo, int ano, double preco, Categorias categoria)throws RemoteException {
 		Carro carro = new Carro(renavam,modelo,ano,preco,categoria);
 		Carro aux = carros.get(carro);
 		if(aux != null) {
-			return false;
+			return 1;
 		}
 		
-		baseDados.addCarro(carro);
-		System.out.println("carro adicionado");
-		return true;
+		boolean add = baseDados.addCarro(carro);
+		if(add) {
+			System.out.println("carro adicionado");
+			return 2;
+		}
+		return 3;
 	}
 	@Override
 	public Boolean removerCarro(String renavam) throws RemoteException{
-		return baseDados.removeCarro(renavam);
+		boolean removido =  baseDados.removeCarro(renavam);
+		if(removido) {
+			System.out.println("carro com renavam " + renavam + " removido" );
+			return true;
+		}
+		return false;
 	}
 	@Override
 	public ArrayList<Carro> listarCarros()throws RemoteException {
+		System.out.println("retornando lista de carros...");
 		return baseDados.listarCarros();
 	}
 	@Override
 	public Carro pesquisarCarro(String RenavanOuNome)throws RemoteException {
-		return baseDados.pesquisarCarro(RenavanOuNome);
+		
+		Carro carro =  baseDados.pesquisarCarro(RenavanOuNome);
+		if(carro == null) {
+			System.out.println("carro não encontrado na base de dados");
+			return carro;
+		}
+		System.out.println("carro encontrado, retornando para usuario");
+		return carro;
 	}
 	@Override
 	public Boolean alterarCarro(String renavam, String modelo, int ano, double preco, Categorias categoria)throws RemoteException{
-		return baseDados.alterarCarro(renavam, modelo, ano, preco, categoria);
+		
+		boolean edit = baseDados.alterarCarro(renavam, modelo, ano, preco, categoria);
+		if(edit) {
+			System.out.println("carro editado na base de dados");
+			return edit;
+		}
+		System.out.println("falha ao editar carro na base de dados");
+		return false;
 	}
 	@Override
 	public int getQuantidade() throws RemoteException{

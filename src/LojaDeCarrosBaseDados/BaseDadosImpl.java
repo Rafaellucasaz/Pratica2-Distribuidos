@@ -60,7 +60,7 @@ public class BaseDadosImpl implements BaseDadosInterface{
 		try {
 			return proxBaseDados.permissao(cont+1);
 		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 		return false;
@@ -74,7 +74,7 @@ public class BaseDadosImpl implements BaseDadosInterface{
 			try {
 				proxBaseDados.atualizarBaseDados(carros, cont+1);
 			} catch (RemoteException e) {
-				// TODO Auto-generated catch block
+				
 				e.printStackTrace();
 			}
 		}
@@ -87,7 +87,7 @@ public class BaseDadosImpl implements BaseDadosInterface{
 				try {
 					proxBaseDados.atualizarBaseDados(carros, cont+1);
 				} catch (RemoteException e) {
-					// TODO Auto-generated catch block
+					
 					e.printStackTrace();
 				}
 			}
@@ -95,7 +95,7 @@ public class BaseDadosImpl implements BaseDadosInterface{
 		
 	}
 	@Override
-	public  void addCarro(Carro carro) {
+	public boolean addCarro(Carro carro) {
 		if(permissao(0)) {
 			emProcesso = true;
 			carros.put(carro.getRenavam(), carro);
@@ -103,13 +103,16 @@ public class BaseDadosImpl implements BaseDadosInterface{
 				atualizarBaseDados(carros, 0);
 				emProcesso = false;
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
+				
 				e.printStackTrace();
 			}
+			return true;
 		}
 		else {
-			System.out.println("ocupado");
+			System.out.println("permissao negada");
+			return false;
 		}
+	
 		
 	}
 	@Override
@@ -132,7 +135,8 @@ public class BaseDadosImpl implements BaseDadosInterface{
 			}
 		}
 		else {
-			System.out.println("ocupado");
+			System.out.println("permissao negada");
+			return false;
 			
 		}
 		return false;
@@ -174,7 +178,8 @@ public class BaseDadosImpl implements BaseDadosInterface{
 			}
 		}
 		else {
-			System.out.println("ocupado");
+			System.out.println("permissao negada");
+			return false;
 		}
 		 
 		return true;

@@ -231,13 +231,17 @@ public class Cliente {
 				adicionarCarro(objRemotoCarros);
 		}
 		try {
-			Boolean add =objRemotoCarros.adicionarCarro(renavam, modelo, ano, preco, categoria);
-			if(add) {
-				System.out.println("carro adicionado com sucesso");
+			int  add = objRemotoCarros.adicionarCarro(renavam, modelo, ano, preco, categoria);
+			if(add == 1) {
+				System.out.println("carro já existe no registro");
 			}
 			else {
-				System.out.println("carro já existe no registro");
-				adicionarCarro(objRemotoCarros);
+				if(add == 2) {
+					System.out.println("carro adicionado");
+				}
+				else {
+					System.out.println("falha ao adicionar carro... tente novamente");
+				}
 			}
 		} catch (RemoteException e) {
 			System.out.println("falha ao adicionar carro... Tente novamente mais tarde");
