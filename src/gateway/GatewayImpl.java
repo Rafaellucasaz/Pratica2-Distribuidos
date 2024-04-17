@@ -67,16 +67,18 @@ public class GatewayImpl implements GatewayInterface {
 	}
 	
 	public CarrosInterface selectReplica() {
-		Random random = new Random();
-		int n =  random.nextInt(3)+1;
+		
 		switch (n) {
-			case 1: {
+			case 0: {
+				n = 1;
 				return getServidorLoja();
 			}
-			case 2:{
+			case 1:{
+				n = 2;
 				return getServidorLojaReplica01();
 			}
-			case 3: {
+			case 2: {
+				n = 0;
 				return getServidorLojaReplica02();
 			}
 		}

@@ -114,13 +114,26 @@ public class BaseDadosImpl implements BaseDadosInterface{
 	}
 	@Override
 	public Boolean removeCarro(String renavam) throws RemoteException {
-		for(Map.Entry<String, Carro> entry:carros.entrySet()) {
-			Carro carro = entry.getValue();
-			if(carro.getRenavam().equalsIgnoreCase(renavam)) {
-				Boolean removido = carros.remove(renavam, carro);
-			
-				return removido;
+		if(permissao(0)) {
+			emProcesso = true;
+			for(Map.Entry<String, Carro> entry:carros.entrySet()) {
+				Carro carro = entry.getValue();
+				if(carro.getRenavam().equalsIgnoreCase(renavam)) {
+					Boolean removido = carros.remove(renavam, carro);
+					try {
+						atualizarBaseDados(carros, 0);
+						emProcesso = false;
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					return removido;
+				}
 			}
+		}
+		else {
+			System.out.println("ocupado");
+			
 		}
 		return false;
 	}
@@ -145,11 +158,24 @@ public class BaseDadosImpl implements BaseDadosInterface{
 	
 	@Override
 	public Boolean alterarCarro(String renavam, String modelo, int ano, double preco, Categorias categoria)throws RemoteException{
-		Carro carro = pesquisarCarro(renavam);
-		carro.setNome(modelo);
-		carro.setAnoFabricacao(ano);
-		carro.setPreco(preco);
-		carro.setCategoria(categoria);
+		if(permissao(0)) {
+			emProcesso = true;
+			Carro carro = pesquisarCarro(renavam);
+			carro.setNome(modelo);
+			carro.setAnoFabricacao(ano);
+			carro.setPreco(preco);
+			carro.setCategoria(categoria);
+			try {
+				atualizarBaseDados(carros, 0);
+				emProcesso = false;
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		else {
+			System.out.println("ocupado");
+		}
 		 
 		return true;
 	}
@@ -161,8 +187,23 @@ public class BaseDadosImpl implements BaseDadosInterface{
 	
 	@Override
 	public Boolean comprarCarro(Carro carro)throws RemoteException {
-		
-		return carros.remove(carro.getRenavam(), carro);
+		if(permissao(0)) {
+			emProcesso = true;
+			Boolean carroRemovido = carros.remove(carro.getRenavam(), carro);
+			try {
+				atualizarBaseDados(carros, 0);
+				emProcesso = false;
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			return carroRemovido;
+		}
+		else {
+			System.out.println("ocupado");
+			return false;
+		}
+	
 	}
 
 	

@@ -14,7 +14,7 @@ public class CarrosImpl implements CarrosInterface{
 	Map<String, Carro> carros;
     BaseDadosInterface baseDados;
     
-	public CarrosImpl() {
+	public CarrosImpl(int portBaseDados) {
 		carros = new HashMap<String, Carro>();
 		carros.put("23456789012", new Carro("23456789012", "Chevrolet Onix", 2019, 55000, Categorias.economico));
         carros.put("34567890123", new Carro("34567890123", "Ford Ka", 2020, 60000, Categorias.economico));
@@ -30,14 +30,14 @@ public class CarrosImpl implements CarrosInterface{
         carros.put("87654321098", new Carro("87654321098", "Chevrolet Cruze", 2020, 105000, Categorias.executivo));
         carros.put("76543210987", new Carro("76543210987", "Audi A3", 2019, 125000, Categorias.executivo));
         
-        conectarBaseDados();
+        conectarBaseDados(portBaseDados);
      
        
 	}
 	
-	public void conectarBaseDados() {
+	public void conectarBaseDados(int port) {
 		try {
-			Registry registro = LocateRegistry.getRegistry(1104);
+			Registry registro = LocateRegistry.getRegistry(port);
 			baseDados = (BaseDadosInterface) registro.lookup("BaseDados");
 			
 			

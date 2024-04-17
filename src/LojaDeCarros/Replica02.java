@@ -6,8 +6,6 @@ import java.rmi.server.UnicastRemoteObject;
 import java.time.LocalDateTime;
 import java.util.Random;
 
-import LojaDeCarrosReplica.CarrosImplReplica01;
-
 public class Replica02 {
 
 	public static int sortearLider() {
@@ -17,7 +15,7 @@ public class Replica02 {
 
 	public static void main(String[] args) {
 		try {
-			CarrosImpl refCarrosObjRemoto = new CarrosImpl();
+			CarrosImpl refCarrosObjRemoto = new CarrosImpl(1124);
 			CarrosInterface skeletonCarros = (CarrosInterface) UnicastRemoteObject.exportObject(refCarrosObjRemoto, 0);
 			LocateRegistry.createRegistry(1103);
 			Registry registro = LocateRegistry.getRegistry(1103);

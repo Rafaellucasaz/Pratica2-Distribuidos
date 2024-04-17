@@ -23,7 +23,7 @@ public class GatewayServidor {
 					1099);
 			registro.bind("Gateway",skeleton);
 			LocalDateTime agora = LocalDateTime.now();
-			System.err.println(agora + " [gatway] INFO - Gatway iniciado na porta 1099");
+			System.err.println(agora + " [gatway] INFO - Gateway iniciado na porta 1099");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
